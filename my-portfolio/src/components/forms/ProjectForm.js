@@ -12,7 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect, useState } from 'react';
 
-export default function ProjectForm({ onSubmit }) {
+export default function ProjectForm({ onSubmit, editValues }) {
   const [skills, setSkills] = useState([])
  
   const defaultValues = {
@@ -20,7 +20,7 @@ export default function ProjectForm({ onSubmit }) {
     description: "",
     overview: "",
     tools: [],
-    imageUrl: "",
+    projectLink: "",
   };
 
   const projectFormSchema = yup.object().shape({
@@ -29,10 +29,11 @@ export default function ProjectForm({ onSubmit }) {
     overView: yup.string(),
     tools: yup.array(),
     imageUrl: yup.string(),
+    projectLink: yup.string(),
   });
 
   const { control, watch, reset, handleSubmit } = useForm({
-    defaultValues,
+    defaultValues: editValues || defaultValues,
     resolver: yupResolver(projectFormSchema),
     mode: "all",
   });
@@ -76,6 +77,25 @@ export default function ProjectForm({ onSubmit }) {
                 fullWidth
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={ 12 }>
+          <Controller
+            control={ control }
+            name='description'
+            render={ ({ field, fieldState }) => (
+              <TextField
+                { ...field }
+                label='Description'
+                variant='outlined'
+                fullWidth
+                multiline
+                minRows={2}
+                maxRows={2}
+                error={ !!fieldState.error }
+                helperText={ fieldState.error?.message }
               />
             )}
           />
