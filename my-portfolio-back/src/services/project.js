@@ -4,10 +4,10 @@ exports.getProjects = async () => {
   let projects = await Project.find().lean().exec();
   return projects;
 };
-exports.getProjectById = async (id) =>{
-    let project = await Project.findById(id).lean().exec();
-    return project;
-}
+exports.getProjectById = async (id) => {
+  let project = await Project.findById(id).lean().exec();
+  return project;
+};
 
 exports.createProject = async (requestBody) => {
   const project = new Project({
@@ -19,4 +19,12 @@ exports.createProject = async (requestBody) => {
     tools: requestBody.tools,
   });
   return await project.save();
+};
+
+exports.updateProject = async (id, projectData) => {
+  const updatedProject = await Project.findByIdAndUpdate(id, projectData, {
+    new: true,
+  }).lean().exec();
+
+  return updatedProject;
 };
